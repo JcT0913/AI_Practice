@@ -20,6 +20,8 @@ public class GemController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
+            UIController.instance.AddPoint();
+
             //gameObject.SetActive(false);
             ToNewPosition();
         }
