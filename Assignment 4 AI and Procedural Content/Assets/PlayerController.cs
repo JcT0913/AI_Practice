@@ -18,6 +18,9 @@ public class PlayerController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rb2D = GetComponent<Rigidbody2D>();
+
+        animator.SetBool("getHurt", false);
+        //animator.SetBool("isCrouch", false);
     }
 
     // Update is called once per frame
@@ -54,6 +57,16 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isJumping", true);
             rb2D.AddForce(new Vector2(0f, moveVertical * jumpForce), ForceMode2D.Impulse);
         }
+
+        //if (Input.GetKeyDown(KeyCode.S))
+        //{
+        //    animator.SetBool("isCrouch", true);
+        //}
+
+        //if (Input.GetKeyUp(KeyCode.S))
+        //{
+        //    animator.SetBool("isCrouch", false);
+        //}
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -63,6 +76,18 @@ public class PlayerController : MonoBehaviour
             isJumping = false;
             animator.SetBool("isJumping", false);
         }
+
+        if (collision.gameObject.tag == "Enemy")
+        {
+            animator.SetBool("getHurt", true);
+            StartCoroutine(WaitTimer(1));
+        }
+    }
+
+    IEnumerator WaitTimer(int seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        animator.SetBool("getHurt", false);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
