@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public Animator animator;
     public float speed = 1f;
-    public float jumpForce = 7f;
+    public float jumpForce = 10f;
 
     private Rigidbody2D rb2D;
     private bool isJumping = false;
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
         rb2D = GetComponent<Rigidbody2D>();
     }
 
@@ -27,15 +29,29 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        float horizontalSpeed = moveHorizontal * (speed / 4);
+        animator.SetFloat("Speed", Mathf.Abs(horizontalSpeed));
+
         if (moveHorizontal >= 0.01f || moveHorizontal <= -0.01f)
         {
+            if (moveHorizontal >= 0.01f)
+            {
+                transform.localScale = new Vector3(5f, 5f, 5f);
+            }
+            else if (moveHorizontal <= -0.01f)
+            {
+                transform.localScale = new Vector3(-5f, 5f, 5f);
+            }
+
             // AddForce() has applied "* Time.deltatime" as default in ForceMode
-            rb2D.AddForce(new Vector2(moveHorizontal * (speed / 4), 0f), ForceMode2D.Impulse);
+            //rb2D.AddForce(new Vector2(moveHorizontal * (speed / 4), 0f), ForceMode2D.Impulse);
+            rb2D.AddForce(new Vector2(horizontalSpeed, 0f), ForceMode2D.Impulse);
         }
 
         if (!isJumping && moveVertical >= 0.01f)
         {
             // AddForce() has applied "* Time.deltatime" as default in ForceMode
+            animator.SetBool("isJumping", true);
             rb2D.AddForce(new Vector2(0f, moveVertical * jumpForce), ForceMode2D.Impulse);
         }
     }
@@ -45,6 +61,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "Ground")
         {
             isJumping = false;
+            animator.SetBool("isJumping", false);
         }
     }
 
@@ -53,6 +70,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "Ground")
         {
             isJumping = true;
+            animator.SetBool("isJumping", true);
         }
     }
 }
