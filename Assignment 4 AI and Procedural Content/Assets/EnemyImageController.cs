@@ -16,6 +16,7 @@ public class EnemyImageController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // change the direction the enemy is facing according to its speed on x axis
         if (aiPath.desiredVelocity.x >= 0.01f)
         {
             transform.localScale = new Vector3(-1f, 1f, 1f);
