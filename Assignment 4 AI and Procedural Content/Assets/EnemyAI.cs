@@ -12,16 +12,16 @@ public class EnemyAI : MonoBehaviour
     public float speed = 200f;
     public float nextWaypointDistance = 1f;
 
-    Pathfinding.Path path;
-    int currentWaypoint = 0;
-    bool reached = false;
-    Seeker seeker;
-    Rigidbody2D rb;
+    private Pathfinding.Path path;
+    private int currentWaypoint = 0;
+    private bool reached = false;
+    private Seeker seeker;
+    private Rigidbody2D rb2D;
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb2D = GetComponent<Rigidbody2D>();
         seeker = GetComponent<Seeker>();
 
         // keep updating new paths from 0 second and each 0.5 seconds, to make enemy keep chasing the target
@@ -47,11 +47,11 @@ public class EnemyAI : MonoBehaviour
             reached = false;
         }
 
-        Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
+        Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb2D.position).normalized;
         Vector2 force = direction * speed * Time.deltaTime;
-        rb.AddForce(force);
+        rb2D.AddForce(force);
 
-        float distance = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]);
+        float distance = Vector2.Distance(rb2D.position, path.vectorPath[currentWaypoint]);
         if (distance <= nextWaypointDistance)
         {
             currentWaypoint += 1;
@@ -72,7 +72,7 @@ public class EnemyAI : MonoBehaviour
     {
         if (seeker.IsDone())
         {
-            seeker.StartPath(rb.position, target.position, OnPathComplete);
+            seeker.StartPath(rb2D.position, target.position, OnPathComplete);
         }
     }
 
