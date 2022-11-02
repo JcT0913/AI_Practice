@@ -60,11 +60,11 @@ public class EnemyAI : MonoBehaviour
         // change the direction the enemy is facing according to its speed on x axis
         if (force.x >= 0.01f)
         {
-            image.localScale = new Vector3(1f, 1f, 1f);
+            image.localScale = new Vector3(-1f, 1f, 1f);
         }
         else if (force.x <= -0.01f)
         {
-            image.localScale = new Vector3(-1f, 1f, 1f);
+            image.localScale = new Vector3(1f, 1f, 1f);
         }
     }
 
